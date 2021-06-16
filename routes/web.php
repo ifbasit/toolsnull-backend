@@ -13,18 +13,13 @@ use App\Http\Controllers\Admin;
 */
 
 Route::get('/admin', function () {
-    if(Admin::isAuth()){
-         return view('admin.dashboard');
-    } else {
-        return view('admin.login');
-    }
-    
+    return Admin::isAuth() ? view('admin.dashboard') : view('admin.login');
 });
 
 Route::post('adminLogin',[Admin::class, 'adminLogin'])->name('adminLogin');
 
 Route::get('/admin/logout', function(Request $request) {
-    if (session()->has('admin')) {
+    if (Admin::isAuth()) {
        session()->forget('admin');
        return redirect('admin');
     } else {
@@ -36,12 +31,7 @@ Route::get('/admin/logout', function(Request $request) {
 Route::get('/admin/dashboard', [Admin::class, 'getDashboardStats'])->name('dashboard');
 
 Route::get('/admin/update-password', function(){
-    if(Admin::isAuth()){
-        return view('admin.update-password');
-    } else {
-        return redirect('admin');
-    }
-    
+    return Admin::isAuth() ? view('admin.update-password') : view('admin');    
 })->name('update-password');
 Route::post('updatePassword',[Admin::class, 'updatePassword'])->name('updatePassword');
 

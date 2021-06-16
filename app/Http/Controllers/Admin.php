@@ -33,10 +33,10 @@ class Admin extends Controller {
 			$credentials->user_name = $req->user_name;
 			$credentials->password 	= md5($req->password);
 
-			$exists = DB::table('admin')->where('user_name',"=",$credentials->user_name)
+			$e = DB::table('admin')->where('user_name',"=",$credentials->user_name)
 			    ->where('password',"=",$credentials->password)
 			    ->first();
-	      if( $exists ){
+	      if( $e ){
 			    $req->session()->put('admin',$credentials);
 			    return redirect('admin/dashboard');
 			  } else {
@@ -59,16 +59,11 @@ class Admin extends Controller {
 	}
 
 	public function getDashboardStats(){
-
-		if($this->isAuth()){
-			return view('admin/dashboard');
-		} else {
-			return redirect('admin');
-		}
-
+		return Admin::isAuth() ? view('admin/dashboard') : redirect('admin');
 	}
 
 	public function updatePassword(Request $req){
+		$table 	  = 'admin';
 		$redirect = 'admin/update-password';
 		if($this->isAuth()){
 			$rules = array(
@@ -84,10 +79,10 @@ class Admin extends Controller {
     			return Redirect::to($redirect)->withErrors($validator); // send back all errors to the login form      
 			} else if($new_password !== $confirm_password){
 				return Redirect::to($redirect)->withErrors(['New Password Does not Match']);
-			} else if(!DB::table('admin')->where('password',"=", md5($old_password))->first()){
+			} else if(!DB::table($table)->where('password',"=", md5($old_password))->first()){
 				return Redirect::to($redirect)->withErrors(['Old Password Does Not Match']);
 			} else {
-    			DB::table('admin')->update(['password' => md5($new_password)]);
+    			DB::table($table)->update(['password' => md5($new_password)]);
 	        	return redirect()->back()->with('success', 'Password Updated'); 
     		}
 		} else {
