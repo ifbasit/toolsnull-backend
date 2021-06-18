@@ -54,8 +54,7 @@
                         <a class="collapse-item" href="new-solution.php">Add</a>
                         <a class="collapse-item" href="view-solutoin.php">View</a>
                          <h6 class="collapse-header">Tags</h6>
-                        <a class="collapse-item" href="add-tag.php">Add</a>
-                        <a class="collapse-item" href="tags.php">View</a>
+                        <a class="collapse-item" href="{{route('tags')}}">Manage</a>
                     </div>
                 </div>
             </li>

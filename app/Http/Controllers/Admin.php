@@ -7,6 +7,8 @@ use Validator;
 use Redirect;
 use Session;
 use \stdClass;
+Use Exception;
+
 
 
 
@@ -24,7 +26,7 @@ class Admin extends Controller {
 		// run the validation rules on the inputs from the form
 		$validator = Validator::make($req->all(), $rules);
 		if ($validator->fails()) {
-    		return Redirect::to('admin')
+    		return Redirect::back()
 		        	->withErrors($validator); // send back all errors to the login form
 		        
 		} else {
@@ -40,7 +42,7 @@ class Admin extends Controller {
 			    $req->session()->put('admin',$credentials);
 			    return redirect('admin/dashboard');
 			  } else {
-				 return Redirect::to('admin')
+				 return Redirect::back()
 		        		->withErrors(['Invalid Username or Password']);
 			  }
 
@@ -76,11 +78,11 @@ class Admin extends Controller {
 			// run the validation rules on the inputs from the form
 			$validator = Validator::make($req->all(), $rules);
 			if ($validator->fails()) {
-    			return Redirect::to($redirect)->withErrors($validator); // send back all errors to the login form      
+    			return Redirect::back()->withErrors($validator); // send back all errors to the login form      
 			} else if($new_password !== $confirm_password){
-				return Redirect::to($redirect)->withErrors(['New Password Does not Match']);
+				return Redirect::back()->withErrors(['New Password Does not Match']);
 			} else if(!DB::table($table)->where('password',"=", md5($old_password))->first()){
-				return Redirect::to($redirect)->withErrors(['Old Password Does Not Match']);
+				return Redirect::back()->withErrors(['Old Password Does Not Match']);
 			} else {
     			DB::table($table)->update(['password' => md5($new_password)]);
 	        	return redirect()->back()->with('success', 'Password Updated'); 
@@ -106,11 +108,7 @@ class Admin extends Controller {
 						'whatsapp' 	=> $req->whatsapp,
 						'skype' 	=> $req->skype
 					]);
-				if($u){
-					return redirect()->back()->with('success', 'Updated'); 
-				} else {
-					return Redirect::to($redirect)->withErrors(['An Error Occurred While Updating.']);
-				}
+				return self::setRedirect($u,'Updated','An Error Occurred While Updating');
 
 			} else {
 				//insert 
@@ -123,11 +121,7 @@ class Admin extends Controller {
 					'skype' 	=> $req->skype
 	      		);
 	        	$i = DB::table($table)->insert($data);
-	        	if($i){
-					return redirect()->back()->with('success', 'Inserted!'); 
-				} else {
-					return Redirect::to($redirect)->withErrors(['An Error Occurred While Inserting.']);
-				}
+	        	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
 
 			}
 		} else {
@@ -162,11 +156,7 @@ class Admin extends Controller {
 						'mobile' 	=> $req->mobile,
 						'tagline' 	=> $req->tagline
 					]);
-				if($u){
-					return redirect()->back()->with('success', 'Updated'); 
-				} else {
-					return Redirect::to($redirect)->withErrors(['An Error Occurred While Updating.']);
-				}
+				return self::setRedirect($u,'Updated','An Error Occurred While Updating');
 
 			} else {
 				//insert 
@@ -179,11 +169,7 @@ class Admin extends Controller {
 					'tagline' 	=> $req->tagline
 	      		);
 	        	$i = DB::table($table)->insert($data);
-	        	if($i){
-					return redirect()->back()->with('success', 'Inserted!'); 
-				} else {
-					return Redirect::to($redirect)->withErrors(['An Error Occurred While Inserting.']);
-				}
+	        	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
 
 			}
 		} else {
@@ -214,11 +200,7 @@ class Admin extends Controller {
 						'hire_me' 		=> $req->hire_me,
 						'about_site' 	=> $req->about_site
 					]);
-				if($u){
-					return redirect()->back()->with('success', 'Updated'); 
-				} else {
-					return Redirect::to($redirect)->withErrors(['An Error Occurred While Updating.']);
-				}
+				return self::setRedirect($u,'Updated','An Error Occurred While Updating');
 
 			} else {
 				//insert 
@@ -228,12 +210,7 @@ class Admin extends Controller {
 					'about_site' 	=> $req->about_site
 	      		);
 	        	$i = DB::table($table)->insert($data);
-	        	if($i){
-					return redirect()->back()->with('success', 'Inserted!'); 
-				} else {
-					return Redirect::to($redirect)->withErrors(['An Error Occurred While Inserting.']);
-				}
-
+	        	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
 			}
 		} else {
 			return redirect('admin');
@@ -263,7 +240,7 @@ class Admin extends Controller {
 			// run the validation rules on the inputs from the form
 			$validator = Validator::make($req->all(), $rules);
 			if ($validator->fails()) {
-    			return Redirect::to($redirect)->withErrors($validator); // send back all errors to the login form      
+    			return Redirect::back()->withErrors($validator); // send back all errors to the login form      
 			} else {
 				$image 			= $req->file('image');
 				$image_name 	= time(). $image->getClientOriginalName();
@@ -274,11 +251,7 @@ class Admin extends Controller {
 					'image' 	=> $image_name
 		      	);
 		      	$i = DB::table($table)->insert($data);
-	        	if($i){
-					return redirect()->back()->with('success', 'Inserted!'); 
-				} else {
-					return Redirect::to($redirect)->withErrors(['An Error Occurred While Inserting.']);
-				}
+	        	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
 			}
 		} else {
 			return redirect('admin');
@@ -300,11 +273,7 @@ class Admin extends Controller {
 		$table 	  = 'testimonials';
 		if($this->isAuth()){
 			$d = DB::table($table)->where('id', '=', $id)->delete();
-	       if($d){
-				return redirect()->back()->with('success', 'Deleted!'); 
-			} else {
-				return Redirect::to($redirect)->withErrors(['An Error Occurred While Deleting.']);
-			}
+			return self::setRedirect($d,'Deleted','An Error Occurred While Deleting');
 		} else {
 			return redirect('admin');
 		}
@@ -320,6 +289,12 @@ class Admin extends Controller {
 		} else {
 			return redirect('admin');
 		}
+	}
+
+
+	public static function setRedirect($condition,$success,$error){
+
+		return $condition ? redirect()->back()->with('success', $success) : Redirect::back()->withErrors([$error]);
 	}
 
 	public function updateTestimonial(Request $req){
@@ -352,39 +327,107 @@ class Admin extends Controller {
 						'image' 	=> $image_name
 					]);
 
-					if($u){
-						return redirect()->back()->with('success', 'Updated'); 
-					} else {
-						return Redirect::to($redirect)->withErrors(['An Error Occurred While Updating.']);
-					}
+					return self::setRedirect($u,'Updated','An Error Occurred While Updating');
 				}				
 
 			} else {
 				//update only text content
-				$rules = array(
-				    'name'    	=> 'required',
-				    'content'	=> 'required'		
-				);
-
-				// run the validation rules on the inputs from the form
-				$validator = Validator::make($req->all(), $rules);
-				if ($validator->fails()) {
-	    			return Redirect::to($redirect)->withErrors($validator); // send back all errors to the login form      
-				} else {
-					$u = DB::table($table)
+				$u = DB::table($table)
 		      		->where('id', $req->id)
 		      		->update([
 			      		'name' 		=> $req->name,
 						'content' 	=> $req->content
 					]);
 
-					if($u){
-						return redirect()->back()->with('success', 'Updated'); 
-					} else {
-						return Redirect::to($redirect)->withErrors(['An Error Occurred While Updating.']);
-					}
-				}
+		      	return self::setRedirect($u,'Updated','An Error Occurred While Updating');
+			}
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function addTag(Request $req){
+		$redirect = 'admin/tags';
+		$table 	  = 'tags';
+
+		if($this->isAuth()){
+			$rules = array(
+			    'name'    	=> 'required'			
+			);
+
+			// run the validation rules on the inputs from the form
+			$validator = Validator::make($req->all(), $rules);
+			if ($validator->fails()) {
+    			return Redirect::back()->withErrors($validator); // send back all errors to the login form      
+			} else {
 				
+				$data 	= array(
+		        	'name' 		=> $req->name
+		      	);
+		      	$i = DB::table($table)->insert($data);
+		      	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
+			}
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function getTags(){
+		$redirect = 'admin/tags';
+		$table 	  = 'tags';
+		if($this->isAuth()){
+			$g = DB::table($table)->get();
+			return view('/admin/tags')->with(['g'=>$g]);
+	       
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function deleteTag(Request $req, $id){
+		$redirect = 'admin/tags';
+		$table 	  = 'tags';
+		if($this->isAuth()){
+			$d = DB::table($table)->where('id', '=', $id)->delete();
+	       return self::setRedirect($d,'Deleted','An Error Occurred While Deleting');
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function getSingleTag(Request $req, $id){
+		$redirect = 'admin/tags';
+		$table 	  = 'tags';
+		if($this->isAuth()){
+			$g = DB::table($table)->where('id', '=', $id)->where('id', $id)->first();
+			return view('/admin/update-tag')->with(['g'=>$g]);
+	       
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function updateTag(Request $req){
+
+		$redirect = 'admin/tags';
+		$table 	  = 'tags';
+		if($this->isAuth()){
+			//update only text content
+			$rules = array(
+			    'name'    	=> 'required'
+			);
+
+			// run the validation rules on the inputs from the form
+			$validator = Validator::make($req->all(), $rules);
+			if ($validator->fails()) {
+    			return Redirect::to($redirect)->withErrors($validator); // send back all errors to the login form      
+			} else {
+				$u = DB::table($table)
+	      		->where('id', $req->id)
+	      		->update([
+		      		'name' 		=> $req->name
+				]);
+	      		return self::setRedirect($u,'Updated','An Error Occurred While Updating');
 			}
 		} else {
 			return redirect('admin');

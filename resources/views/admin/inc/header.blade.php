@@ -32,6 +32,15 @@
             display: block;
             margin: 0 auto;
         }
+        .btn-default {
+                border: 1px solid #bfc0c9;
+        }
+        .w-30-center-alert {
+            width: 30%;
+            display: block;
+            margin: 0 auto;
+            text-align: center;
+        }
     </style>
 
 </head>

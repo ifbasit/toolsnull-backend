@@ -34,7 +34,6 @@
                     	
                     	
                     		@if($g !== null)
-                    		
 		                    <form method="POST" action="{{route('updateTestimonial')}}"  enctype="multipart/form-data">
 
 							    <div class="form-group">
@@ -56,14 +55,16 @@
 									<label>Previous Image</label> <br>
 									<img src="{{URL::asset('uploads/testimonials/' . $g->image)}}" style="width: 10%">
 								</div>
+								 <a href="{{ route('testimonials') }}" class="float-left btn btn-default  mb-5" >
+                                        <i class="fas fa-undo"></i> Back</a>
 								<button class="w-25 float-right btn btn-primary mb-5 btn-block" type="submit"><i class="fas fa-paper-plane"></i> Post</button>
 								@csrf
-                              	<div class="form-group" style="width:50%">
+                              	<div class="form-group w-30-center-alert">
                               		@if($errors->any())
-										<p class="alert alert-danger mt-5">{{$errors->first()}}</p>
+										<p class="alert alert-danger">{{$errors->first()}}</p>
 								   @endif
 								   @if (Session::has('success'))
-								   		<p class="alert alert-success mt-5">{{ Session::get('success') }}</p>	
+								   		<p class="alert alert-success">{{ Session::get('success') }}</p>	
 								   @endif
 								</div>
 							</form>

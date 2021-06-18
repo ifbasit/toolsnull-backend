@@ -50,5 +50,11 @@ Route::get('/admin/delete-testimonial/{id}',[Admin::class, 'deleteTestimonial'])
 Route::get('/admin/update-testimonial/{id}',[Admin::class, 'getSingleTestimonial'])->name('getSingleTestimonial');
 Route::post('updateTestimonial',[Admin::class, 'updateTestimonial'])->name('updateTestimonial');
 
+Route::get('/admin/tags', [Admin::class, 'getTags'])->name('tags');
+Route::post('addTag',[Admin::class, 'addTag'])->name('addTag');
+Route::get('/admin/delete-tag/{id}',[Admin::class, 'deleteTag'])->name('deleteTag');
+Route::get('/admin/update-tag/{id}',[Admin::class, 'getSingleTag'])->name('getSingleTag');
+Route::post('updateTag',[Admin::class, 'updateTag'])->name('updateTag');
+
 
 
