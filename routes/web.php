@@ -56,5 +56,11 @@ Route::get('/admin/delete-tag/{id}',[Admin::class, 'deleteTag'])->name('deleteTa
 Route::get('/admin/update-tag/{id}',[Admin::class, 'getSingleTag'])->name('getSingleTag');
 Route::post('updateTag',[Admin::class, 'updateTag'])->name('updateTag');
 
+Route::get('/admin/code-solution', [Admin::class, 'getCodeSolutions'])->name('code-solution');
+Route::post('addCodeSolution',[Admin::class, 'addCodeSolution'])->name('addCodeSolution');
+Route::get('/admin/delete-code-solution/{code_solution_id}',[Admin::class, 'deleteCodeSolution'])->name('deleteCodeSolution');
+Route::get('/admin/update-code-solution/{code_solution_id}',[Admin::class, 'getSingleCodeSolution'])->name('getSingleCodeSolution');
+
+
 
 

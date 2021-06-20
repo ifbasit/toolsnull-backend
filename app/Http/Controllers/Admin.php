@@ -385,7 +385,6 @@ class Admin extends Controller {
 	}
 
 	public function deleteTag(Request $req, $id){
-		$redirect = 'admin/tags';
 		$table 	  = 'tags';
 		if($this->isAuth()){
 			$d = DB::table($table)->where('id', '=', $id)->delete();
@@ -395,11 +394,10 @@ class Admin extends Controller {
 		}
 	}
 
-	public function getSingleTag(Request $req, $id){
-		$redirect = 'admin/tags';
+	public function getSingleTag($id){
 		$table 	  = 'tags';
 		if($this->isAuth()){
-			$g = DB::table($table)->where('id', '=', $id)->where('id', $id)->first();
+			$g = DB::table($table)->where('id', '=', $id)->first();
 			return view('/admin/update-tag')->with(['g'=>$g]);
 	       
 		} else {
@@ -432,6 +430,106 @@ class Admin extends Controller {
 		} else {
 			return redirect('admin');
 		}
+	}
+
+	public function getCodeSolutions(Request $req){
+
+		$table 	  = 'code_solution';
+		if($this->isAuth()){
+			$g = DB::table($table)->get();
+			$t = self::getAllTags();
+			return view('/admin/code-solution')->with(['g'=>$g,'t'=>$t]);
+	       
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function addCodeSolution(Request $req){
+		$table 	  = 'code_solution';
+		if($this->isAuth()){
+			$rules = array(
+			    'title'    	=> 'required',
+			    'content'	=> 'required',
+			    'tags'		=> 'required'			
+			);
+
+			// run the validation rules on the inputs from the form
+			$validator = Validator::make($req->all(), $rules);
+			if ($validator->fails()) {
+    			return Redirect::back()->withErrors($validator); // send back all errors to the login form      
+			} else {
+				
+				$data 	= array(
+		        	'title' 		=> $req->title,
+		        	'content' 		=> $req->content,
+		        	'added_date'	=> date('d-M-Y'),
+		        	'views'			=> 0,
+		      	);
+		      	$i 			= DB::table($table)->insert($data);
+		      	$cs_last_id = DB::getPdo()->lastInsertId();
+
+		      	//tags
+		      	$tags 		= $req->tags;
+		      	foreach($tags as $tag){
+		      		$tags	= array(
+			        	'code_solution_id' 	=> $cs_last_id,
+			        	'tag_id'			=> $tag
+			        );
+			        DB::table('code_solution_tag')->insert($tags);
+		      	}
+
+		      	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
+			}
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function getSingleCodeSolution($code_solution_id){
+		$table 	  = 'code_solution';
+		if($this->isAuth()){
+			$g = DB::table($table)->where('code_solution_id', '=', $code_solution_id)->first();
+			$t = self::getAllTags();
+			return view('/admin/update-code-solution')->with(['g'=>$g,'t'=>$t]);
+	       
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function deleteCodeSolution($code_solution_id){
+		$table 	  = 'code_solution';
+		if($this->isAuth()){
+			$d = DB::table($table)->where('code_solution_id', '=', $code_solution_id)->delete();
+	       return self::setRedirect($d,'Deleted','An Error Occurred While Deleting');
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public static function getAllTags(){
+		return DB::table('tags')->get();
+	}
+
+	public static function getTagsNameByCodeSolutionID($id,$str = true){
+		$g = DB::table('tags')
+	    	->join('code_solution_tag', 'tags.id', '=', 'code_solution_tag.tag_id')
+	    	->where('code_solution_tag.code_solution_id','=',$id)
+	    	->pluck('name');
+
+	    $k = '';
+	    foreach($g as $i)
+	    	$k.=$i.",";
+	    
+	    return  $str ? trim($k,",") : $g;
+	}
+
+	public static function getTagsByCodeSolutionID($id){
+		$g = DB::table('tags')
+	    	->join('code_solution_tag', 'tags.id', '=', 'code_solution_tag.tag_id')
+	    	->where('code_solution_tag.code_solution_id','=',$id);
+	    return $g;
 	}
 
 

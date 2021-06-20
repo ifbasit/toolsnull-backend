@@ -51,8 +51,7 @@
                 <div id="collapseUtilities-1" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Code Solution</h6>
-                        <a class="collapse-item" href="new-solution.php">Add</a>
-                        <a class="collapse-item" href="view-solutoin.php">View</a>
+                        <a class="collapse-item" href="{{route('code-solution')}}">Manage</a>
                          <h6 class="collapse-header">Tags</h6>
                         <a class="collapse-item" href="{{route('tags')}}">Manage</a>
                     </div>
