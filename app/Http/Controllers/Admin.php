@@ -528,7 +528,8 @@ class Admin extends Controller {
 	public static function getTagsByCodeSolutionID($id){
 		$g = DB::table('tags')
 	    	->join('code_solution_tag', 'tags.id', '=', 'code_solution_tag.tag_id')
-	    	->where('code_solution_tag.code_solution_id','=',$id);
+	    	->where('code_solution_tag.code_solution_id','=',$id)
+	    	->get();
 	    return $g;
 	}
 
