@@ -60,6 +60,7 @@ Route::get('/admin/code-solution', [Admin::class, 'getCodeSolutions'])->name('co
 Route::post('addCodeSolution',[Admin::class, 'addCodeSolution'])->name('addCodeSolution');
 Route::get('/admin/delete-code-solution/{code_solution_id}',[Admin::class, 'deleteCodeSolution'])->name('deleteCodeSolution');
 Route::get('/admin/update-code-solution/{code_solution_id}',[Admin::class, 'getSingleCodeSolution'])->name('getSingleCodeSolution');
+Route::post('updateCodeSolution',[Admin::class, 'updateCodeSolution'])->name('updateCodeSolution');
 
 
 

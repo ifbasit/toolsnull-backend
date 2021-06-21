@@ -26,11 +26,8 @@ class Admin extends Controller {
 		// run the validation rules on the inputs from the form
 		$validator = Validator::make($req->all(), $rules);
 		if ($validator->fails()) {
-    		return Redirect::back()
-		        	->withErrors($validator); // send back all errors to the login form
-		        
+    		return Redirect::back()->withErrors($validator); // send back all errors 		        
 		} else {
-
 			$credentials = new stdClass;
 			$credentials->user_name = $req->user_name;
 			$credentials->password 	= md5($req->password);
@@ -42,8 +39,7 @@ class Admin extends Controller {
 			    $req->session()->put('admin',$credentials);
 			    return redirect('admin/dashboard');
 			  } else {
-				 return Redirect::back()
-		        		->withErrors(['Invalid Username or Password']);
+				 return Redirect::back()->withErrors(['Invalid Username or Password']);
 			  }
 
 		}	
@@ -66,7 +62,6 @@ class Admin extends Controller {
 
 	public function updatePassword(Request $req){
 		$table 	  = 'admin';
-		$redirect = 'admin/update-password';
 		if($this->isAuth()){
 			$rules = array(
 			    'new_password'    => 'required|alphaNum|min:5'			
@@ -78,7 +73,7 @@ class Admin extends Controller {
 			// run the validation rules on the inputs from the form
 			$validator = Validator::make($req->all(), $rules);
 			if ($validator->fails()) {
-    			return Redirect::back()->withErrors($validator); // send back all errors to the login form      
+    			return Redirect::back()->withErrors($validator); // send back all errors       
 			} else if($new_password !== $confirm_password){
 				return Redirect::back()->withErrors(['New Password Does not Match']);
 			} else if(!DB::table($table)->where('password',"=", md5($old_password))->first()){
@@ -93,7 +88,6 @@ class Admin extends Controller {
 	}
 
 	public function updateSocialLinks(Request $req){
-		$redirect = 'admin/social-links';
 		$table 	  = 'social_links';
 		if($this->isAuth()){
 			$rows = DB::table($table)->count();
@@ -109,7 +103,6 @@ class Admin extends Controller {
 						'skype' 	=> $req->skype
 					]);
 				return self::setRedirect($u,'Updated','An Error Occurred While Updating');
-
 			} else {
 				//insert 
 				$data 	= array(
@@ -122,7 +115,6 @@ class Admin extends Controller {
 	      		);
 	        	$i = DB::table($table)->insert($data);
 	        	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
-
 			}
 		} else {
 			return redirect('admin');
@@ -141,7 +133,6 @@ class Admin extends Controller {
 	}
 
 	public function updatePersonalInformation(Request $req){
-		$redirect = 'admin/personal-information';
 		$table 	  = 'p_info';
 		if($this->isAuth()){
 			$rows = DB::table($table)->count();
@@ -157,7 +148,6 @@ class Admin extends Controller {
 						'tagline' 	=> $req->tagline
 					]);
 				return self::setRedirect($u,'Updated','An Error Occurred While Updating');
-
 			} else {
 				//insert 
 				$data 	= array(
@@ -170,7 +160,6 @@ class Admin extends Controller {
 	      		);
 	        	$i = DB::table($table)->insert($data);
 	        	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
-
 			}
 		} else {
 			return redirect('admin');
@@ -188,7 +177,6 @@ class Admin extends Controller {
 	}
 
 	public function updateSiteContent(Request $req){
-		$redirect = 'admin/site-content';
 		$table 	  = 'site_content';
 		if($this->isAuth()){
 			$rows = DB::table($table)->count();
@@ -201,7 +189,6 @@ class Admin extends Controller {
 						'about_site' 	=> $req->about_site
 					]);
 				return self::setRedirect($u,'Updated','An Error Occurred While Updating');
-
 			} else {
 				//insert 
 				$data 	= array(
@@ -228,7 +215,6 @@ class Admin extends Controller {
 	}
 
 	public function addTestimonial(Request $req){
-		$redirect = 'admin/testimonials';
 		$table 	  = 'testimonials';
 		if($this->isAuth()){
 			$rules = array(
@@ -236,11 +222,10 @@ class Admin extends Controller {
 			    'content'	=> 'required',
 			    'image'		=> 'required|image|mimes:jpeg,png,jpg,gif,svg'			
 			);
-
 			// run the validation rules on the inputs from the form
 			$validator = Validator::make($req->all(), $rules);
 			if ($validator->fails()) {
-    			return Redirect::back()->withErrors($validator); // send back all errors to the login form      
+    			return Redirect::back()->withErrors($validator); // send back all errors       
 			} else {
 				$image 			= $req->file('image');
 				$image_name 	= time(). $image->getClientOriginalName();
@@ -269,7 +254,6 @@ class Admin extends Controller {
 	}
 
 	public function deleteTestimonial(Request $req, $id){
-		$redirect = 'admin/testimonials';
 		$table 	  = 'testimonials';
 		if($this->isAuth()){
 			$d = DB::table($table)->where('id', '=', $id)->delete();
@@ -280,7 +264,6 @@ class Admin extends Controller {
 	}
 
 	public function getSingleTestimonial(Request $req, $id){
-		$redirect = 'admin/update-testimonial';
 		$table 	  = 'testimonials';
 		if($this->isAuth()){
 			$g = DB::table($table)->where('id', '=', $id)->where('id', $id)->first();
@@ -298,8 +281,6 @@ class Admin extends Controller {
 	}
 
 	public function updateTestimonial(Request $req){
-
-		$redirect = 'admin/update-testimonial/'.$req->id;
 		$table 	  = 'testimonials';
 		if($this->isAuth()){
 			if($req->hasFile('image')) {
@@ -313,7 +294,7 @@ class Admin extends Controller {
 				// run the validation rules on the inputs from the form
 				$validator = Validator::make($req->all(), $rules);
 				if ($validator->fails()) {
-	    			return Redirect::to($redirect)->withErrors($validator); // send back all errors to the login form      
+	    			return Redirect::back()->withErrors($validator); // send back all errors       
 				} else {
 					$image 			= $req->file('image');
 					$image_name 	= time(). $image->getClientOriginalName();
@@ -347,23 +328,15 @@ class Admin extends Controller {
 	}
 
 	public function addTag(Request $req){
-		$redirect = 'admin/tags';
 		$table 	  = 'tags';
-
 		if($this->isAuth()){
-			$rules = array(
-			    'name'    	=> 'required'			
-			);
-
+			$rules = array('name'  => 'required');
 			// run the validation rules on the inputs from the form
 			$validator = Validator::make($req->all(), $rules);
 			if ($validator->fails()) {
-    			return Redirect::back()->withErrors($validator); // send back all errors to the login form      
-			} else {
-				
-				$data 	= array(
-		        	'name' 		=> $req->name
-		      	);
+    			return Redirect::back()->withErrors($validator); // send back all errors       
+			} else {				
+				$data 	= array('name' => $req->name );
 		      	$i = DB::table($table)->insert($data);
 		      	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
 			}
@@ -373,7 +346,6 @@ class Admin extends Controller {
 	}
 
 	public function getTags(){
-		$redirect = 'admin/tags';
 		$table 	  = 'tags';
 		if($this->isAuth()){
 			$g = DB::table($table)->get();
@@ -407,18 +379,14 @@ class Admin extends Controller {
 
 	public function updateTag(Request $req){
 
-		$redirect = 'admin/tags';
 		$table 	  = 'tags';
 		if($this->isAuth()){
 			//update only text content
-			$rules = array(
-			    'name'    	=> 'required'
-			);
-
+			$rules = array('name'    	=> 'required');
 			// run the validation rules on the inputs from the form
 			$validator = Validator::make($req->all(), $rules);
 			if ($validator->fails()) {
-    			return Redirect::to($redirect)->withErrors($validator); // send back all errors to the login form      
+    			return Redirect::back()->withErrors($validator); // send back all errors       
 			} else {
 				$u = DB::table($table)
 	      		->where('id', $req->id)
@@ -433,7 +401,6 @@ class Admin extends Controller {
 	}
 
 	public function getCodeSolutions(Request $req){
-
 		$table 	  = 'code_solution';
 		if($this->isAuth()){
 			$g = DB::table($table)->get();
@@ -457,9 +424,8 @@ class Admin extends Controller {
 			// run the validation rules on the inputs from the form
 			$validator = Validator::make($req->all(), $rules);
 			if ($validator->fails()) {
-    			return Redirect::back()->withErrors($validator); // send back all errors to the login form      
-			} else {
-				
+    			return Redirect::back()->withErrors($validator); // send back all errors       
+			} else {				
 				$data 	= array(
 		        	'title' 		=> $req->title,
 		        	'content' 		=> $req->content,
@@ -468,7 +434,6 @@ class Admin extends Controller {
 		      	);
 		      	$i 			= DB::table($table)->insert($data);
 		      	$cs_last_id = DB::getPdo()->lastInsertId();
-
 		      	//tags
 		      	$tags 		= $req->tags;
 		      	foreach($tags as $tag){
@@ -508,6 +473,50 @@ class Admin extends Controller {
 		}
 	}
 
+	public function updateCodeSolution(Request $req){
+
+		$table 	  = 'code_solution';
+		if($this->isAuth()){
+			//update only text content
+			$rules = array(
+			    'title'    	=> 'required',
+			    'content'	=> 'required',
+			    'tags'		=> 'required'
+			);
+
+			// run the validation rules on the inputs from the form
+			$validator = Validator::make($req->all(), $rules);
+			if ($validator->fails()) {
+    			return Redirect::back()->withErrors($validator); // send back all errors       
+			} else {
+				$u = DB::table($table)
+	      		->where('code_solution_id', $req->code_solution_id)
+	      		->update([
+		      		'title' 		=> $req->title,
+		        	'content' 		=> $req->content,
+				]);
+				if($u == false || $u == true){
+					$d = DB::table('code_solution_tag')->where('code_solution_id', '=', $req->code_solution_id)->delete();
+					//tags
+			      	$tags 		= $req->tags;
+			      	foreach($tags as $tag){
+			      		$tags	= array(
+				        	'code_solution_id' 	=> $req->code_solution_id,
+				        	'tag_id'			=> $tag
+				        );
+					$i = DB::table('code_solution_tag')->insert($tags);
+				}
+				
+				$a = $u || ($d && $i);
+	      		return self::setRedirect($a,'Updated','An Error Occurred While Updating');
+
+				}				
+			}
+		} else {
+			return redirect('admin');
+		}
+	}
+
 	public static function getAllTags(){
 		return DB::table('tags')->get();
 	}
@@ -538,7 +547,6 @@ class Admin extends Controller {
         
         return $_SERVER['DOCUMENT_ROOT'].'/'.$path;
     }
-
 
 }
 

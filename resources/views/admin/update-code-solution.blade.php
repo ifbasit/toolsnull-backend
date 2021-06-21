@@ -35,7 +35,7 @@ use App\Http\Controllers\Admin;
 
                     <div class="row">
                         <div class="col-md-8 m-auto">   
-                            <form action="{{route('addCodeSolution')}}" method="POST">
+                            <form action="{{route('updateCodeSolution')}}" method="POST">
 
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Title</label>
@@ -44,21 +44,23 @@ use App\Http\Controllers\Admin;
 
                                 <label>Content</label>
                                 <textarea rows="20" cols="10" id="post_content" name="content" class="TinyMCE">{{$g->content}}</textarea>
-                                <input type="hidden" name="id" value="{{$g->code_solution_id}}">
+                                <input type="hidden" name="code_solution_id" value="{{$g->code_solution_id}}">
+                                <div class="mt-4">
+                                	<label for="">Current Tags</label>
+                                	{{Admin::getTagsNameByCodeSolutionID($g->code_solution_id)}}
+                                </div>
                                 <div class=" mt-4">
                                   <label for="tags">Choose tags:</label>
                                     <select class="form-control" name="tags[]"  multiple>
-
-                                    	@foreach(Admin::getTagsByCodeSolutionID($g->code_solution_id) as $j)
-                                    		@foreach($t as $i)
-                                        		<option value="{{$j->tag_id}}" @if($i->id == $j->tag_id) selected="" @endif>{{$i->name}}</option>
-                                        	
-                                        	@endforeach
-                                        	
+                                    	@foreach($t as $i)
+										    @php $selected=false; @endphp
+											@foreach(Admin::getTagsByCodeSolutionID($g->code_solution_id) as $j)
+	                                    			 @if($i->id == $j->tag_id)
+													 	@php $selected=true; @endphp
+													 @endif
+											@endforeach
+                                        	<option value="{{$i->id}}" @if($selected) selected="" @endif>{{$i->name}}</option>
                                         @endforeach
-                                        
-
-                                       
                                     </select>  
                                 </div>
 
