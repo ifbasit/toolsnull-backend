@@ -45,10 +45,6 @@ use App\Http\Controllers\Admin;
                                 <label>Content</label>
                                 <textarea rows="20" cols="10" id="post_content" name="content" class="TinyMCE">{{$g->content}}</textarea>
                                 <input type="hidden" name="code_solution_id" value="{{$g->code_solution_id}}">
-                                <div class="mt-4">
-                                	<label for="">Current Tags</label>
-                                	{{Admin::getTagsNameByCodeSolutionID($g->code_solution_id)}}
-                                </div>
                                 <div class=" mt-4">
                                   <label for="tags">Choose tags:</label>
                                     <select class="form-control" name="tags[]"  multiple>
