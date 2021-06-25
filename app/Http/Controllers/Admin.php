@@ -543,6 +543,80 @@ class Admin extends Controller {
 	}
 
 
+	public function addCategory(Request $req){
+		$table 	  = 'categories';
+		if($this->isAuth()){
+			$rules = array('cat_name'  => 'required');
+			// run the validation rules on the inputs from the form
+			$validator = Validator::make($req->all(), $rules);
+			if ($validator->fails()) {
+    			return Redirect::back()->withErrors($validator); // send back all errors       
+			} else {				
+				$data 	= array('cat_name' => $req->cat_name );
+		      	$i = DB::table($table)->insert($data);
+		      	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
+			}
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function getCategories(){
+		$table 	  = 'categories';
+		if($this->isAuth()){
+			$g = DB::table($table)->get();
+			return view('/admin/categories')->with(['g'=>$g]);
+	       
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function deleteCategory(Request $req, $id){
+		$table 	  = 'categories';
+		if($this->isAuth()){
+			$d = DB::table($table)->where('id', '=', $id)->delete();
+	       return self::setRedirect($d,'Deleted','An Error Occurred While Deleting');
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function getSingleCategory($id){
+		$table 	  = 'categories';
+		if($this->isAuth()){
+			$g = DB::table($table)->where('id', '=', $id)->first();
+			return view('/admin/update-category')->with(['g'=>$g]);
+	       
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function updateCategory(Request $req){
+
+		$table 	  = 'categories';
+		if($this->isAuth()){
+			//update only text content
+			$rules = array('cat_name'    	=> 'required');
+			// run the validation rules on the inputs from the form
+			$validator = Validator::make($req->all(), $rules);
+			if ($validator->fails()) {
+    			return Redirect::back()->withErrors($validator); // send back all errors       
+			} else {
+				$u = DB::table($table)
+	      		->where('id', $req->id)
+	      		->update([
+		      		'cat_name' 		=> $req->cat_name
+				]);
+	      		return self::setRedirect($u,'Updated','An Error Occurred While Updating');
+			}
+		} else {
+			return redirect('admin');
+		}
+	}
+
+
 	function getPublicPath($path){
         
         return $_SERVER['DOCUMENT_ROOT'].'/'.$path;

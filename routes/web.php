@@ -62,6 +62,12 @@ Route::get('/admin/delete-code-solution/{code_solution_id}',[Admin::class, 'dele
 Route::get('/admin/update-code-solution/{code_solution_id}',[Admin::class, 'getSingleCodeSolution'])->name('getSingleCodeSolution');
 Route::post('updateCodeSolution',[Admin::class, 'updateCodeSolution'])->name('updateCodeSolution');
 
+Route::get('/admin/categories', [Admin::class, 'getCategories'])->name('categories');
+Route::post('addCategory',[Admin::class, 'addCategory'])->name('addCategory');
+Route::get('/admin/delete-category/{id}',[Admin::class, 'deleteCategory'])->name('deleteCategory');
+Route::get('/admin/update-category/{id}',[Admin::class, 'getSingleCategory'])->name('getSingleCategory');
+Route::post('updateCategory',[Admin::class, 'updateCategory'])->name('updateCategory');
+
 
 
 

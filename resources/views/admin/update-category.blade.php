@@ -24,7 +24,7 @@
 
                   <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Update Tag</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Update Category</h1>
                     </div>
 
                     <!-- Content Row -->
@@ -32,15 +32,15 @@
                     <div class="row">
                         <div class="col-md-8 m-auto">   
                         	@if($g !== null)
-	                            <form action="{{route('updateTag')}}" method="POST">
+	                            <form action="{{route('updateCategory')}}" method="POST">
 
 	                                <div class="form-group">
 	                                    <label for="exampleInputEmail1">Name</label>
-	                                    <input type="text" class="form-control" name="name" value="{{$g->name}}" required="">
+	                                    <input type="text" class="form-control" name="cat_name" value="{{$g->cat_name}}" required="">
 	                                </div>
                                      <input type="hidden" name="id" value="{{$g->id}}">
 
-                                    <a href="{{ route('tags') }}" class="float-left btn btn-default  mb-5" >
+                                    <a href="{{ route('categories') }}" class="float-left btn btn-default  mb-5" >
                                         <i class="fas fa-undo"></i> Back</a>
 	                                <button class="w-25 float-right btn btn-primary  mb-5 btn-block" type="submit"><i class="fas fa-paper-plane"></i> Post</button>
 	                                @csrf
