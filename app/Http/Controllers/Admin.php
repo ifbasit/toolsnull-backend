@@ -521,6 +521,10 @@ class Admin extends Controller {
 		return DB::table('tags')->get();
 	}
 
+	public static function getAllCategories(){
+		return DB::table('categories')->get();
+	}
+
 	public static function getTagsNameByCodeSolutionID($id,$str = true){
 		$g = DB::table('tags')
 	    	->join('code_solution_tag', 'tags.id', '=', 'code_solution_tag.tag_id')
@@ -616,6 +620,147 @@ class Admin extends Controller {
 		}
 	}
 
+	public function getArticles(Request $req){
+		$table 	  = 'articles';
+		if($this->isAuth()){
+			$g = DB::table($table)
+				->join('categories as cat', 'cat.id', '=', 'articles.cat_id')
+	    		->get();
+			$t = self::getAllCategories();
+			return view('/admin/articles')->with(['g'=>$g,'t'=>$t]);
+	       
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function addArticle(Request $req){
+		$table 	  = 'articles';
+		if($this->isAuth()){
+			$rules = array(
+			    'title'    		=> 'required',
+			    'content'		=> 'required',
+			    'cat_id'		=> 'required',	
+			    'image'			=> 'required|image|mimes:jpeg,png,jpg,gif,svg',				
+			    'description'	=> 'required',			
+			    'keywords'		=> 'required'			
+			);
+
+			// run the validation rules on the inputs from the form
+			$validator = Validator::make($req->all(), $rules);
+			if ($validator->fails()) {
+    			return Redirect::back()->withErrors($validator); // send back all errors       
+			} else {	
+				$image 			= $req->file('image');
+				$image_name 	= time(). $image->getClientOriginalName();
+				$image->move($this->getPublicPath('uploads/articles'),$image_name);			
+				$data 	= array(
+		        	'title' 		=> $req->title,
+		        	'content' 		=> $req->content,
+		        	'cat_id' 		=> $req->cat_id,
+		        	'image' 		=> $image_name,
+		        	'description' 	=> $req->description,
+		        	'keywords' 		=> $req->keywords,
+		        	'added_date'	=> date('d-M-Y')
+		      	);
+		      	$i 			= DB::table($table)->insert($data);
+		      	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
+			}
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function deleteArticle($article_id){
+		$table 	  = 'articles';
+		if($this->isAuth()){
+			$d = DB::table($table)->where('article_id', '=', $article_id)->delete();
+	       return self::setRedirect($d,'Deleted','An Error Occurred While Deleting');
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function getSingleArticle($article_id){
+		$table 	  = 'articles';
+		if($this->isAuth()){
+			$g = DB::table($table)->where('article_id', '=', $article_id)->first();
+			$t = self::getAllCategories();
+			return view('/admin/update-article')->with(['g'=>$g,'t'=>$t]);
+	       
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function updateArticle(Request $req){
+		$table 	  = 'articles';
+		if($this->isAuth()){
+			$rules = array(
+			    'title'    		=> 'required',
+			    'content'		=> 'required',
+			    'cat_id'		=> 'required',			
+			    'description'	=> 'required',			
+			    'keywords'		=> 'required'				
+			);
+			if($req->hasFile('image')) {
+				//now update image as well
+				$rules['image'] = 'required|image|mimes:jpeg,png,jpg,gif,svg';
+				// run the validation rules on the inputs from the form
+				$validator = Validator::make($req->all(), $rules);
+				if ($validator->fails()) {
+	    			return Redirect::back()->withErrors($validator); // send back all errors       
+				} else {
+					$image 			= $req->file('image');
+					$image_name 	= time(). $image->getClientOriginalName();
+					$image->move($this->getPublicPath('uploads/articles'),$image_name);
+
+			      	$u = DB::table($table)
+			      		->where('article_id', $req->article_id)
+			      		->update([
+			      		'title' 		=> $req->title,
+			        	'content' 		=> $req->content,
+			        	'cat_id' 		=> $req->cat_id,
+			        	'image' 		=> $image_name,
+			        	'description' 	=> $req->description,
+			        	'keywords' 		=> $req->keywords
+					]);
+
+					return self::setRedirect($u,'Updated','An Error Occurred While Updating');
+				}				
+
+			} else {
+				//update only text content
+				// run the validation rules on the inputs from the form
+				$validator = Validator::make($req->all(), $rules);
+				if ($validator->fails()) {
+	    			return Redirect::back()->withErrors($validator); // send back all errors       
+				} else {
+					$u = DB::table($table)
+		      		->where('article_id', $req->article_id)
+		      		->update([
+			      		'title' 		=> $req->title,
+			        	'content' 		=> $req->content,
+			        	'cat_id' 		=> $req->cat_id,
+			        	'description' 	=> $req->description,
+			        	'keywords' 		=> $req->keywords
+					]);
+
+		      		return self::setRedirect($u,'Updated','An Error Occurred While Updating');
+				}
+				
+			}
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public static function getCategoryNameByID($id){
+		$g = DB::table('categories')
+	    	->where('id','=',$id)
+	    	->pluck('cat_name');
+	    return $g ? $g[0] : 'Not Found';
+	}
 
 	function getPublicPath($path){
         

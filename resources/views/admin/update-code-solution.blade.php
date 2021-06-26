@@ -59,7 +59,8 @@ use App\Http\Controllers\Admin;
                                         @endforeach
                                     </select>  
                                 </div>
-
+                                <a href="{{ route('code-solution') }}" class="float-left btn btn-default mt-3  mb-5" >
+                                        <i class="fas fa-undo"></i> Back</a>
                                 <button class="w-25 float-right btn btn-primary mt-3 mb-5 btn-block"><i class="fas fa-paper-plane"></i> Post</button>
                                 @csrf
                               	<div class="form-group w-30-center-alert mt-3" >

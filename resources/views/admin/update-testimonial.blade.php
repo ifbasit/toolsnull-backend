@@ -52,7 +52,7 @@
 									<input class="form-control" type="file" name="image" >
 								</div>
 								<div class="form-group">
-									<label>Previous Image</label> <br>
+									<label>Current Image</label> <br>
 									<img src="{{URL::asset('uploads/testimonials/' . $g->image)}}" style="width: 10%">
 								</div>
 								 <a href="{{ route('testimonials') }}" class="float-left btn btn-default  mb-5" >

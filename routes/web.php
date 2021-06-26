@@ -69,5 +69,12 @@ Route::get('/admin/update-category/{id}',[Admin::class, 'getSingleCategory'])->n
 Route::post('updateCategory',[Admin::class, 'updateCategory'])->name('updateCategory');
 
 
+Route::get('/admin/articles', [Admin::class, 'getArticles'])->name('articles');
+Route::post('addArticle',[Admin::class, 'addArticle'])->name('addArticle');
+Route::get('/admin/delete-article/{article_id}',[Admin::class, 'deleteArticle'])->name('deleteArticle');
+Route::get('/admin/update-article/{article_id}',[Admin::class, 'getSingleArticle'])->name('getSingleArticle');
+Route::post('updateArticle',[Admin::class, 'updateArticle'])->name('updateArticle');
+
+
 
 
