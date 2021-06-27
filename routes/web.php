@@ -80,5 +80,16 @@ Route::get('/admin/add-tool', function(){
 })->name('add-tool');
 
 
+Route::get('/admin/logout', function() {
+        if (Admin::isAuth()) {
+           session()->forget('admin');
+        }
+        return redirect('admin');
+})->name('logout');
+
+
+
+
+
 
 
