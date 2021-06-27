@@ -31,7 +31,7 @@ Route::get('/admin/logout', function(Request $request) {
 Route::get('/admin/dashboard', [Admin::class, 'getDashboardStats'])->name('dashboard');
 
 Route::get('/admin/update-password', function(){
-    return Admin::isAuth() ? view('admin.update-password') : view('admin');    
+    return Admin::isAuth() ? view('admin.update-password') : view('admin.login');    
 })->name('update-password');
 Route::post('updatePassword',[Admin::class, 'updatePassword'])->name('updatePassword');
 
@@ -74,6 +74,10 @@ Route::post('addArticle',[Admin::class, 'addArticle'])->name('addArticle');
 Route::get('/admin/delete-article/{article_id}',[Admin::class, 'deleteArticle'])->name('deleteArticle');
 Route::get('/admin/update-article/{article_id}',[Admin::class, 'getSingleArticle'])->name('getSingleArticle');
 Route::post('updateArticle',[Admin::class, 'updateArticle'])->name('updateArticle');
+
+Route::get('/admin/add-tool', function(){
+    return Admin::isAuth() ? view('admin.add-tool') : view('admin.login');    
+})->name('add-tool');
 
 
 

@@ -68,8 +68,8 @@
                 <div id="collapseUtilities-2" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Tools:</h6>
-                        <a class="collapse-item" href="add-tools.php">Add</a>
-                        <a class="collapse-item" href="view-tools.php">New</a>
+                        <a class="collapse-item" href="{{route('add-tool')}}">Add</a>
+                        <a class="collapse-item" href="view-tools.php">View</a>
                     </div>
                 </div>
             </li>
