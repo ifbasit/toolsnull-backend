@@ -104,6 +104,9 @@ use App\Http\Controllers\Admin;
                                                     <a href="{{ route('getSingleCodeSolution', $i->code_solution_id) }}" class="btn btn-circle btn-primary">
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
+                                                     <a href="#" class="btn btn-circle btn-success">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
                                                 </td>
                                             </tr> 
                                             @endforeach       

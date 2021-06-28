@@ -69,7 +69,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Tools:</h6>
                         <a class="collapse-item" href="{{route('add-tool')}}">Add</a>
-                        <a class="collapse-item" href="view-tools.php">View</a>
+                        <a class="collapse-item" href="{{route('tools')}}">View</a>
                     </div>
                 </div>
             </li>
@@ -103,10 +103,11 @@
             </li>
 
             <!-- Nav Item - Charts -->
+
             <li class="nav-item">
                 <a class="nav-link" href="{{route('logout')}}">
                     <i class="fas fa-fw fa-sign-out-alt"></i>
-                    <span>Logout</span></a>
+                    <span>Logout xx</span></a>
             </li>
 
             <!-- Divider -->

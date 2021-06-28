@@ -45,16 +45,6 @@ class Admin extends Controller {
 		}	
 	}
 
-	public static function adminAuth($credentials){
-
-		return DB::table('admin')->where('user_name',"=",$credentials->user_name)
-			    ->where('password',"=",$credentials->password)
-			    ->first() ? '1' : '0';
-	}
-
-	public static function isAuth(){
-		 return Session::has('admin') && self::adminAuth(Session::get('admin')) == '1';
-	}
 
 	public function getDashboardStats(){
 		return Admin::isAuth() ? view('admin/dashboard') : redirect('admin');
@@ -266,7 +256,7 @@ class Admin extends Controller {
 	public function getSingleTestimonial(Request $req, $id){
 		$table 	  = 'testimonials';
 		if($this->isAuth()){
-			$g = DB::table($table)->where('id', '=', $id)->where('id', $id)->first();
+			$g = DB::table($table)->where('id', $id)->first();
 			return view('/admin/update-testimonial')->with(['g'=>$g]);
 	       
 		} else {
@@ -275,10 +265,7 @@ class Admin extends Controller {
 	}
 
 
-	public static function setRedirect($condition,$success,$error){
-
-		return $condition ? redirect()->back()->with('success', $success) : Redirect::back()->withErrors([$error]);
-	}
+	
 
 	public function updateTestimonial(Request $req){
 		$table 	  = 'testimonials';
@@ -620,6 +607,13 @@ class Admin extends Controller {
 		}
 	}
 
+	public static function getCategoryNameByID($id){
+		$g = DB::table('categories')
+	    	->where('id','=',$id)
+	    	->pluck('cat_name');
+	    return $g ? $g[0] : 'Not Found';
+	}
+
 	public function getArticles(Request $req){
 		$table 	  = 'articles';
 		if($this->isAuth()){
@@ -755,17 +749,100 @@ class Admin extends Controller {
 		}
 	}
 
-	public static function getCategoryNameByID($id){
-		$g = DB::table('categories')
-	    	->where('id','=',$id)
-	    	->pluck('cat_name');
-	    return $g ? $g[0] : 'Not Found';
+	public function getAddToolView(){
+
+		return $this->isAuth() ? view('admin.add-tool') : redirect('admin');
 	}
 
-	function getPublicPath($path){
+	public function addTool(Request $req){
+		$table 	  = 'tools';
+		if($this->isAuth()){
+			$rules = array(
+			    'title'    		=> 'required',
+			    'content'		=> 'required',
+			    'short_title'	=> 'required',				
+			    'description'	=> 'required',			
+			    'keywords'		=> 'required',
+			    'slug'			=> 'required',	
+			    'icon_class'	=> 'required',		
+			);
+
+			// run the validation rules on the inputs from the form
+			$validator = Validator::make($req->all(), $rules);
+			if ($validator->fails()) {
+    			return Redirect::back()->withErrors($validator); // send back all errors       
+			} else {			
+				$data 	= array(
+		        	'title' 		=> $req->title,
+		        	'content' 		=> $req->content,
+		        	'short_title' 	=> $req->short_title,
+		        	'description' 	=> $req->description,
+		        	'keywords' 		=> $req->keywords,
+		        	'slug' 			=> $req->slug,
+		        	'icon_class' 	=> $req->icon_class,
+		        	'added_date'	=> date('d-M-Y')
+		      	);
+		      	$i 			= DB::table($table)->insert($data);
+		      	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
+			}
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function getTools(Request $req){
+		$table 	  = 'tools';
+		if($this->isAuth()){
+			$g = DB::table($table)->get();
+			return view('/admin/tools')->with(['g'=>$g]);
+	       
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function deleteTool(Request $req, $tool_id){
+		$table 	  = 'tools';
+		if($this->isAuth()){
+			$d = DB::table($table)->where('tool_id', '=', $tool_id)->delete();
+			return self::setRedirect($d,'Deleted','An Error Occurred While Deleting');
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function getSingleTool(Request $req, $id){
+		$table 	  = 'tools';
+		if($this->isAuth()){
+			$g = DB::table($table)->where('tool_id', $tool_id)->first();
+			return view('/admin/update-testimonial')->with(['g'=>$g]);
+	       
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	
+	public static function setRedirect($condition,$success,$error){
+
+		return $condition ? redirect()->back()->with('success', $success) : Redirect::back()->withErrors([$error]);
+	}
+
+	public function getPublicPath($path){
         
         return $_SERVER['DOCUMENT_ROOT'].'/'.$path;
     }
+
+    public static function isAuth(){
+		 return Session::has('admin') && self::adminAuth(Session::get('admin')) == '1';
+	}
+
+	public static function adminAuth($credentials){
+
+		return DB::table('admin')->where('user_name',"=",$credentials->user_name)
+			    ->where('password',"=",$credentials->password)
+			    ->first() ? '1' : '0';
+	}
 
 }
 

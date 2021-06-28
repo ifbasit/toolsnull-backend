@@ -37,19 +37,19 @@ use App\Http\Controllers\Admin;
 
                     <div class="row">
                         <div class="col-md-8 m-auto">   
-                            <form>
+                             <form action="{{route('addTool')}}" method="POST">
 
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Title</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" name="title" required="">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Short Title</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" name="short_title" required="">
                                 </div>
                                  <div class="form-group">
                                  	<label>Content</label>
-                                	<textarea rows="20" cols="10" id="post_content" class="TinyMCE">
+                                	<textarea rows="20" cols="10" name="content" class="TinyMCE" required="">
                                     Welcome to TinyMCE!
                                 	</textarea>
                            		 </div>	
@@ -68,15 +68,24 @@ use App\Http\Controllers\Admin;
 
                                 <div class="form-group mt-3">
                                     <label for="exampleInputEmail1">Slug</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" name="slug" required="">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Icon Class</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" name="icon_class" required="">
                                 </div>
 
                                 <button class="w-25 float-right btn btn-primary mt-3 mb-5 btn-block"><i class="fas fa-paper-plane"></i> Post</button>
+                                @csrf
+                              	<div class="form-group w-30-center-alert mt-3" >
+	                          	   @if($errors->any())
+										<p class="alert alert-danger ">{{$errors->first()}}</p>
+								   @endif
+								   @if (Session::has('success'))
+								   		<p class="alert alert-success">{{ Session::get('success') }}</p>	
+								   @endif
+								</div>
                             </form>
                         </div>
                     </div>
