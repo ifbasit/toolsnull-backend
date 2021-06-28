@@ -71,7 +71,7 @@ use App\Http\Controllers\Admin;
                                                     <a href="{{ route('deleteTool', $i->tool_id) }}" class="btn btn-circle btn-danger ml-4">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
-                                                    <a href="#" class="btn btn-circle btn-primary">
+                                                    <a href="{{ route('getSingleTool', $i->tool_id) }}" class="btn btn-circle btn-primary">
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
                                                      <a href="#" class="btn btn-circle btn-success">

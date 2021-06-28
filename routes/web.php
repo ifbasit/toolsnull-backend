@@ -112,6 +112,7 @@ Route::post('addTool',[Admin::class, 'addTool'])->name('addTool');
 Route::get('/admin/tools', [Admin::class, 'getTools'])->name('tools');
 Route::get('/admin/delete-tool/{tool_id}',[Admin::class, 'deleteTool'])->name('deleteTool');
 Route::get('/admin/update-tool/{tool_id}',[Admin::class, 'getSingleTool'])->name('getSingleTool');
+Route::post('updateTool',[Admin::class, 'updateTool'])->name('updateTool');
 
 
 

@@ -811,12 +811,48 @@ class Admin extends Controller {
 		}
 	}
 
-	public function getSingleTool(Request $req, $id){
+	public function getSingleTool(Request $req, $tool_id){
 		$table 	  = 'tools';
 		if($this->isAuth()){
 			$g = DB::table($table)->where('tool_id', $tool_id)->first();
-			return view('/admin/update-testimonial')->with(['g'=>$g]);
+			return view('/admin/update-tool')->with(['g'=>$g]);
 	       
+		} else {
+			return redirect('admin');
+		}
+	}
+
+	public function updateTool(Request $req){
+
+		$table 	  = 'tools';
+		if($this->isAuth()){
+			$rules = array(
+			    'title'    		=> 'required',
+			    'content'		=> 'required',
+			    'short_title'	=> 'required',				
+			    'description'	=> 'required',			
+			    'keywords'		=> 'required',
+			    'slug'			=> 'required',	
+			    'icon_class'	=> 'required',		
+			);
+			// run the validation rules on the inputs from the form
+			$validator = Validator::make($req->all(), $rules);
+			if ($validator->fails()) {
+    			return Redirect::back()->withErrors($validator); // send back all errors       
+			} else {
+				$u = DB::table($table)
+	      		->where('tool_id', $req->tool_id)
+	      		->update([
+		      		'title' 		=> $req->title,
+		        	'content' 		=> $req->content,
+		        	'short_title' 	=> $req->short_title,
+		        	'description' 	=> $req->description,
+		        	'keywords' 		=> $req->keywords,
+		        	'slug' 			=> $req->slug,
+		        	'icon_class' 	=> $req->icon_class,
+				]);
+	      		return self::setRedirect($u,'Updated','An Error Occurred While Updating');
+			}
 		} else {
 			return redirect('admin');
 		}

@@ -34,7 +34,8 @@ use App\Http\Controllers\Admin;
                     <!-- Content Row -->
 
                     <div class="row">
-                        <div class="col-md-8 m-auto">   
+                        <div class="col-md-8 m-auto">  
+                        @if($g !== null) 
                             <form action="{{route('updateCodeSolution')}}" method="POST">
 
                                 <div class="form-group">
@@ -72,6 +73,11 @@ use App\Http\Controllers\Admin;
 								   @endif
 								</div>
                             </form>
+                            @else
+                                <div class="center w-50 text-center">
+                                    <p class="alert alert-danger  mt-3">Not Found</p>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
