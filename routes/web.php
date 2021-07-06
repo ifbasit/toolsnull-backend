@@ -2,13 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Main;
 
 
 
 
 /*
 |--------------------------------------------------------------------------
-| Admin Routes
+| a. ADMIN ROUTES
 |--------------------------------------------------------------------------
 */
 
@@ -115,6 +116,16 @@ Route::get('/admin/update-tool/{tool_id}',[Admin::class, 'getSingleTool'])->name
 Route::post('updateTool',[Admin::class, 'updateTool'])->name('updateTool');
 
 
+/*
+|--------------------------------------------------------------------------
+| b. MAIN ROUTES
+|--------------------------------------------------------------------------
+*/
+
+
+// Route::get('/admin', function () {
+//     return Admin::isAuth() ? view('admin.dashboard') : view('admin.login');
+// });
 
 
 
