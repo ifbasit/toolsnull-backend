@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin;
                 <!-- Topbar -->
                @include('admin.inc.top-bar')
                 <!-- End of Topbar -->
-
+            
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 

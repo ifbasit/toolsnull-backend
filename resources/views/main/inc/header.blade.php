@@ -3,7 +3,7 @@
 <head>
 	<title>Tools Null</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="{{ asset('main-assets/css/fontawesome.min.css') }}" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 	<link rel="stylesheet" type="text/css" href="{{ asset('main-assets/css/bootstrap.min.css') }}">
 	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
 	<link rel="stylesheet" type="text/css" href="{{ asset('main-assets/css/style.css') }}">
@@ -25,7 +25,7 @@
       <div class="navbar-header d-flex align-items-center justify-content-between">
         <!-- Navbar Brand -->
         <a href="index.php" class="navbar-brand brand-text">
-        	<img src="images/logo.png" class="img-fluid" width="130">
+        	<img src="{{URL::asset('main-assets/images/logo.png')}}" class="img-fluid" width="130">
         </a>
         <!-- Toggle Button-->
         <button type="button" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler">
@@ -36,7 +36,7 @@
       <!-- Navbar Menu -->
       <div id="navbarcollapse" class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="index.php" class="nav-link  nav-active">home</a>
+          <li class="nav-item"><a href="{{route('index')}}" class="nav-link  nav-active">home</a>
           </li>
           <li class="nav-item"><a href="blog.php" class="nav-link ">blog</a>
           </li>

@@ -33,6 +33,7 @@
     <!-- TINY MCE -->
      <script>
         tinymce.init({
+            cleanup : true,
           selector: '.TinyMCE',
           plugins: '  autolink lists  media    table  ',
           toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',

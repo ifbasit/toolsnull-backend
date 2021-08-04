@@ -418,6 +418,7 @@ class Admin extends Controller {
 		        	'content' 		=> $req->content,
 		        	'added_date'	=> date('d-M-Y'),
 		        	'views'			=> 0,
+		        	'slug'			=> self::slugify($req->title)
 		      	);
 		      	$i 			= DB::table($table)->insert($data);
 		      	$cs_last_id = DB::getPdo()->lastInsertId();
@@ -655,7 +656,8 @@ class Admin extends Controller {
 		        	'image' 		=> $image_name,
 		        	'description' 	=> $req->description,
 		        	'keywords' 		=> $req->keywords,
-		        	'added_date'	=> date('d-M-Y')
+		        	'added_date'	=> date('d-M-Y'),
+		        	'slug'			=> self::slugify($req->title)
 		      	);
 		      	$i 			= DB::table($table)->insert($data);
 		      	return self::setRedirect($i,'Inserted','An Error Occurred While Inserting');
@@ -878,6 +880,32 @@ class Admin extends Controller {
 		return DB::table('admin')->where('user_name',"=",$credentials->user_name)
 			    ->where('password',"=",$credentials->password)
 			    ->first() ? '1' : '0';
+	}
+
+	public static function slugify($text, string $divider = '-') {
+	  // replace non letter or digits by divider
+	  $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
+
+	  // transliterate
+	  $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+	  // remove unwanted characters
+	  $text = preg_replace('~[^-\w]+~', '', $text);
+
+	  // trim
+	  $text = trim($text, $divider);
+
+	  // remove duplicate divider
+	  $text = preg_replace('~-+~', $divider, $text);
+
+	  // lowercase
+	  $text = strtolower($text);
+
+	  if (empty($text)) {
+	    return 'n-a';
+	  }
+
+	  return $text;
 	}
 
 }

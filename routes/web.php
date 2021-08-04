@@ -123,9 +123,7 @@ Route::post('updateTool',[Admin::class, 'updateTool'])->name('updateTool');
 */
 
 
-// Route::get('/admin', function () {
-//     return Admin::isAuth() ? view('admin.dashboard') : view('admin.login');
-// });
+Route::get('/', [Main::class, 'index'])->name('index');
 
 
 
