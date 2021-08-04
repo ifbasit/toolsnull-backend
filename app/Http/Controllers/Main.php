@@ -15,9 +15,9 @@ class Main extends Controller {
     public function index(Request $req){
 
         $a = self::getLastestArticles();
-        $c =  self::getLatestCodeSolutions();
-     
-       return view('main.index')->with(['a'=>$a,'c'=>$c]);
+        $c = self::getLatestCodeSolutions();
+        $s = self::getSiteContent('about_site'); 
+       return view('main.index')->with(['a'=>$a,'c'=>$c,'s'=>$s]);
     }
 
     public static function getLastestArticles(){
@@ -51,6 +51,10 @@ class Main extends Controller {
             ->where('articles.cat_id','=',$id)
             ->get();
         return $g;
+    }
+
+    public static function getSiteContent($column){
+        return DB::table('site_content')->pluck($column)[0];
     }
 
 }
