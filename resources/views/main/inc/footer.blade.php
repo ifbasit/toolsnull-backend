@@ -34,8 +34,8 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 col-sm-6 col-12">
-          <p class="copyright-text">Copyright © 2020 All Rights Reserved by
-            <a href="#">Code4Education</a>.
+          <p class="copyright-text">Copyright © 2021 All Rights Reserved by
+            <a href="{{route('index')}}">ToolsNull</a>.
           </p>
         </div>
 
@@ -80,6 +80,16 @@ $(document).ready(function(){
     });
 }); 
 
+//  CODE HIGHLIGHTER
+document.addEventListener('DOMContentLoaded', (event) => {
+  document.querySelectorAll('code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+});
+
+</script>
+<script>
+	
 </script>
 
 

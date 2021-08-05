@@ -126,6 +126,11 @@ Route::post('updateTool',[Admin::class, 'updateTool'])->name('updateTool');
 Route::get('/', [Main::class, 'index'])->name('index');
 
 
+// BLOG
+Route::get('/blog/{article_slug}', [Main::class, 'getSingleArticle'])->name('getSingleArticleMain');
+
+
+
 
 
 

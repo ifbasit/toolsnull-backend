@@ -4,62 +4,26 @@ use App\Http\Controllers\Admin;
 @endphp
 
 <!-- TOOLS -->
+@if(!$t->isEmpty())
 <section class="bg-light-blue">
 	<h1 class="text-center  fw-900 p-5 clr-blue letter-spacing">Tools I Offer</h1>
 	<div class="container">
       <div class="row align-items-center justify-content-center pb-5">
-        <div class="col-lg-3 col-sm-5 col-md-4 col-xs-10 post tool-card box-shadow" data-href="email-scraper-online.php">
-            <div class="text-center">
-              <i class="fa fa-envelope img-fluid tool-icon" aria-hidden="true"></i>
-            </div>
-            <p class="text-center">
-               <a href="email-scraper-online.php" class="clr-blue">Email Scraper</a>
-            </p>
-        </div>
-                <div class="col-lg-3 col-sm-5 col-md-4 col-xs-10 post tool-card box-shadow" data-href="email-scraper-online.php">
-            <div class="text-center">
-              <i class="fa fa-envelope img-fluid tool-icon" aria-hidden="true"></i>
-            </div>
-            <p class="text-center">
-               <a href="email-scraper-online.php" class="clr-blue">Email Scraper</a>
-            </p>
-        </div>
-                <div class="col-lg-3 col-sm-5 col-md-4 col-xs-10 post tool-card box-shadow" data-href="email-scraper-online.php">
-            <div class="text-center">
-              <i class="fa fa-envelope img-fluid tool-icon" aria-hidden="true"></i>
-            </div>
-            <p class="text-center">
-               <a href="email-scraper-online.php" class="clr-blue">Email Scraper</a>
-            </p>
-        </div>
-
-                <div class="col-lg-3 col-sm-5 col-md-4 col-xs-10 post tool-card box-shadow" data-href="email-scraper-online.php">
-            <div class="text-center">
-              <i class="fa fa-envelope img-fluid tool-icon" aria-hidden="true"></i>
-            </div>
-            <p class="text-center">
-               <a href="email-scraper-online.php" class="clr-blue">Email Scraper</a>
-            </p>
-        </div>
-        <div class="col-lg-3 col-sm-5 col-md-4 col-xs-10 post tool-card box-shadow" data-href="email-scraper-online.php">
-            <div class="text-center">
-              <i class="fa fa-envelope img-fluid tool-icon" aria-hidden="true"></i>
-            </div>
-            <p class="text-center">
-               <a href="email-scraper-online.php" class="clr-blue">Email Scraper</a>
-            </p>
-        </div>
-        <div class="col-lg-3 col-sm-5 col-md-4 col-xs-10 post tool-card box-shadow" data-href="email-scraper-online.php">
-            <div class="text-center">
-              <i class="fa fa-envelope img-fluid tool-icon" aria-hidden="true"></i>
-            </div>
-            <p class="text-center">
-               <a href="email-scraper-online.php" class="clr-blue">Email Scraper</a>
-            </p>
-        </div>
+      	@foreach($t as $i)
+	        <div class="col-lg-3 col-sm-5 col-md-4 col-xs-10 post tool-card box-shadow" data-href="{{$i->slug}}">
+	            <div class="text-center">
+	              <i class="{{$i->icon_class}} img-fluid tool-icon" aria-hidden="true"></i>
+	            </div>
+	            <p class="text-center">
+	               <a href="{{$i->slug}}" class="clr-blue">{{$i->short_title}}</a>
+	            </p>
+	        </div>
+        @endforeach
+               
     </div>
   </div>
 </section>
+@endif
 <!-- TOOLS -->
 
 <!-- BLOG -->
@@ -79,7 +43,7 @@ use App\Http\Controllers\Admin;
 		                  <div class="category">
 		                  	<a href="#">{{$i->cat_name}}</a>
 		                  </div>
-		                  	<a href="single-post.php">
+		                  	<a href="{{ route('getSingleArticleMain', $i->slug) }}">
 		                    	<h2 class="post-heading">{{$i->title}} </h2>
 		                    </a>
 		                </header>
@@ -93,10 +57,10 @@ use App\Http\Controllers\Admin;
 		              </div>
 		            </div>
 		          </div>
-		          <div class="image col-lg-5" style="min-height: 344px;"><img src="{{URL::asset('uploads/articles/' . $i->image)}}" alt="..."></div>
+		          <div class="image col-lg-5" style="min-height: 344px;"><img src="{{URL::asset('uploads/articles/' . $i->image)}}" alt="{{$i->title}}"></div>
         	@else
         		 <div class="row d-flex align-items-stretch">
-		          <div class="image col-lg-5" style="min-height: 344px;"><img src="{{URL::asset('uploads/articles/' . $i->image)}}" alt="..."></div>
+		          <div class="image col-lg-5" style="min-height: 344px;"><img src="{{URL::asset('uploads/articles/' . $i->image)}}" alt="{{$i->title}}"></div>
 		          <div class="text col-lg-7 custom-order-1">
 		            <div class="text-inner d-flex align-items-center">
 		              <div class="content">
@@ -104,7 +68,7 @@ use App\Http\Controllers\Admin;
 		                  <div class="category">
 		                  	<a href="#">{{$i->cat_name}}</a>
 		                  </div>
-		                  	<a href="single-post.php">
+		                  	<a href="{{ route('getSingleArticleMain', $i->slug) }}">
 		                    	<h2 class="post-heading">{{$i->title}} </h2>
 		                    </a>
 		                </header>

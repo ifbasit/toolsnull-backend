@@ -17,7 +17,29 @@ class Main extends Controller {
         $a = self::getLastestArticles();
         $c = self::getLatestCodeSolutions();
         $s = self::getSiteContent('about_site'); 
-       return view('main.index')->with(['a'=>$a,'c'=>$c,'s'=>$s]);
+        $t = self::getAllTools();
+       return view('main.index')->with(['a'=>$a,'c'=>$c,'s'=>$s,'t'=> $t]);
+    }
+
+    public static function getRelatedPostsByTitle($keywords){
+
+        //TODO
+        return DB::table("articles")->where('keywords', 'like', '%'.$keywords.'%')->get();
+    }
+
+    public function getSingleArticle(Request $req, $article_slug){
+        $s = self::getSiteContent('about_site'); 
+        $g = DB::table("articles")
+            ->join('categories', 'articles.cat_id', '=', 'categories.id')
+            ->where('articles.slug','=',$article_slug)
+            ->get();
+        $l = self::getLastestArticles();
+
+        return view('main.article')->with(['g'=>$g,'s'=>$s,'l'=>$l]);
+    }
+
+    public static function getAllTools(){
+        return DB::table("tools")->orderBy('tool_id', 'desc')->get();
     }
 
     public static function getLastestArticles(){
@@ -52,6 +74,8 @@ class Main extends Controller {
             ->get();
         return $g;
     }
+
+    
 
     public static function getSiteContent($column){
         return DB::table('site_content')->pluck($column)[0];
