@@ -1,4 +1,8 @@
-@include('main.inc.header')
+@extends('layouts.master')
+@section('title', $g[0]->title)
+
+
+@section('content')
 @if(!$g->isEmpty())
 <section class="bg-light-blue p-5">
 	<div class="container single-post-container">
@@ -53,7 +57,5 @@
 	</div>
 @endif
 </section>
+@endsection
 
-<!-- FOOTER -->
-@include('main.inc.footer')
-<!-- FOOTER -->

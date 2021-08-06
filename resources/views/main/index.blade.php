@@ -1,8 +1,13 @@
-@include('main.inc.header')
+@extends('layouts.master')
 @php
 use App\Http\Controllers\Admin;
 @endphp
 
+
+
+@section('title', 'About Us')
+
+@section('content')
 <!-- TOOLS -->
 @if(!$t->isEmpty())
 <section class="bg-light-blue">
@@ -131,8 +136,5 @@ use App\Http\Controllers\Admin;
   </div>
 </section>
 @endif
-<!-- CODE SOLUTIONS -->
+@endsection
 
-<!-- FOOTER -->
-@include('main.inc.footer')
-<!-- FOOTER -->

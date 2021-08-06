@@ -59,3 +59,10 @@
     </div>
   </nav>
 </header>
+	<body>
+        <div class="main-content">
+            @yield('content')
+        </div>
+        @include('main.inc.footer')
+    </body>
+</html>

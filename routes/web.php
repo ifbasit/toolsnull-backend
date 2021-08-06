@@ -124,6 +124,7 @@ Route::post('updateTool',[Admin::class, 'updateTool'])->name('updateTool');
 
 
 Route::get('/', [Main::class, 'index'])->name('index');
+Route::get('/test', function(){ return view('main.test'); })->name('inxdex');
 
 
 // BLOG

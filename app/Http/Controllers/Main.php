@@ -16,15 +16,21 @@ class Main extends Controller {
 
         $a = self::getLastestArticles();
         $c = self::getLatestCodeSolutions();
-        $s = self::getSiteContent('about_site'); 
+       $s = self::getSiteContent('about_site'); 
         $t = self::getAllTools();
-       return view('main.index')->with(['a'=>$a,'c'=>$c,'s'=>$s,'t'=> $t]);
+       return view('main.index')->with(['a'=>$a,'c'=>$c,'t'=> $t,'s'=>$s]);
     }
 
     public static function getRelatedPostsByTitle($keywords){
 
         //TODO
         return DB::table("articles")->where('keywords', 'like', '%'.$keywords.'%')->get();
+    }
+
+    public static function getFooterContent(){
+        //TODO
+        $s = self::getSiteContent('about_site'); 
+        return view('main.footer')->with(['s'=>$s]);
     }
 
     public function getSingleArticle(Request $req, $article_slug){
